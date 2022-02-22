@@ -7,7 +7,7 @@ PIP = $(PYTHON3) -m pip
 TEST_DIR = tests
 
 .PHONY: test
-test: venv-test $(DEV_CONFIG) start-db
+test: venv-test $(DEV_CONFIG)
 	$(PYTHON3) -m pytest $(TEST_DIR) $(PYTEST_ARGS)
 	$(MAKE) lint
 
@@ -17,7 +17,7 @@ clean-coverage:
 	rm -fr htmlcov
 
 .PHONY: coverage
-coverage: venv-test $(DEV_CONFIG) start-db clean-coverage
+coverage: venv-test $(DEV_CONFIG) clean-coverage
 	$(PYTHON3) -m coverage run --omit="$(TEST_DIR)/*" --source=. -m pytest $(TEST_DIR) $(PYTEST_ARGS)
 	$(PYTHON3) -m coverage report
 	$(PYTHON3) -m coverage html
@@ -69,7 +69,7 @@ $(ENV_TEST_DEP): $(ENV_RUN_DEP) requirements-test.txt
 	touch $(ENV_TEST_DEP)
 
 .PHONY: clean
-clean: clean-db clean-coverage
+clean: clean-coverage
 	rm -fr $(ENV_DIR)
 	find -name '*.pyc' -type f -delete
 	find -name '__pycache__' -type d -delete
